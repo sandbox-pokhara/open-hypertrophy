@@ -8,5 +8,4 @@ preview = true
 
 [tool.pyright]
 typeCheckingMode = "strict"
-include = ["backend"]
 exclude = ["**/venv", "**/migrations"]
