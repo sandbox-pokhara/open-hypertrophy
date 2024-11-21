@@ -4,6 +4,12 @@ An open-source web-based strength tracker for hypertrophy
 
 Note: This project is under construction.
 
+## Demo
+
+- Link: https://hypertrophy.sandbox.com.np
+- Username: `demo`
+- Password: `demo`
+
 ## Concept
 
 ![Concept](excalidraws/concept.excalidraw.png)
