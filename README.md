@@ -1,6 +1,12 @@
 # open-hypertrophy
 
-An opensource web-based stregth tracker for hypertrophy
+An open-source web-based strength tracker for hypertrophy
+
+Note: This project is under construction.
+
+## Concept
+
+![Concept](excalidraws/concept.excalidraw.png)
 
 ## Run Locally using Docker
 
