@@ -10,20 +10,16 @@ Note: This project is under construction.
 
 ## Run Locally using Docker
 
-1. Install https://taskfile.dev/installation/ to get access to `task` command. This step is optional and the commands can be directly run without `task` command.
-1. Run a postgres server on port 5432, if you haven't already.
+1. Download `docker-compose.yml`.
+1. Start the server.
    ```
-   task run-db
-   ```
-1. Build and run the server.
-   ```
-   task build run
+   docker compose up
    ```
 1. The server should be running in http://127.0.0.1:8000/.
 
 1. Create a user to access the web application.
    ```
-   task create-superuser
+   docker compose exec python manage.py createsuperuser
    ```
 
 ## License
