@@ -7,5 +7,6 @@ line-length = 79
 preview = true
 
 [tool.pyright]
+include = ["backend"]
 typeCheckingMode = "strict"
 exclude = ["**/venv", "**/migrations"]
