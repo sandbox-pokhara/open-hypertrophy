@@ -20,3 +20,7 @@ tasks:
   create-superuser:
     cmds:
       - docker exec -it open_hypertrophy python manage.py createsuperuser
+
+  deploy:
+    cmds:
+      - ssh andreu-ovh -t "cd open-hypertrophy && docker compose pull && docker compose up -d"
