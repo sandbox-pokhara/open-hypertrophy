@@ -7,9 +7,15 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "kubb": "kubb"
   },
   "dependencies": {
+    "@kubb/cli": "^3.0.13",
+    "@kubb/core": "^3.0.13",
+    "@kubb/plugin-oas": "^3.0.13",
+    "@kubb/plugin-react-query": "^3.0.13",
+    "@kubb/plugin-ts": "^3.0.13",
     "@radix-ui/react-select": "^2.1.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",

@@ -1,0 +1,1 @@
+{"properties":{"name":{"title":"Name","type":"string"}},"required":["name"],"title":"CreateExerciseSchema","type":"object","x-readme-ref-name":"CreateExerciseSchema"}
