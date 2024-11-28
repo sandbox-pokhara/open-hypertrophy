@@ -141,5 +141,5 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Whitenoise
-WHITENOISE_SPA_ROOT = BASE_DIR.parent / "frontend" / "dist"
+WHITENOISE_SPA_ROOT = BASE_DIR / "dist"
 WHITENOISE_SPA_URL_PATTERN = "/"
