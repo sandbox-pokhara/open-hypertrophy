@@ -43,15 +43,14 @@ class LiftAdmin(admin.ModelAdmin[Lift]):
     autocomplete_fields = ["exercise"]
     list_display = [
         "id",
+        "date",
         "user",
         "exercise",
         "repitions",
         "weight",
         "estimated_1rm",
-        "date_created",
-        "date_modified",
     ]
-    list_filter = ["user", "exercise", "date_created", "date_modified"]
+    list_filter = ["user", "exercise", "date"]
     exclude = ["user"]
 
     def estimated_1rm(self, obj: Lift):
