@@ -11,6 +11,7 @@ export type { CoreApiListLifts200, CoreApiListLiftsQueryResponse, CoreApiListLif
 export type { CreateExerciseSchema } from "./types/CreateExerciseSchema.ts";
 export type { CreateLiftSchema } from "./types/CreateLiftSchema.ts";
 export type { GenericSchema } from "./types/GenericSchema.ts";
+export type { LiftSchema } from "./types/LiftSchema.ts";
 export { coreApiCreateExerciseMutationKey, useCoreApiCreateExercise } from "./hooks/useCoreApiCreateExercise.ts";
 export { coreApiCreateLiftMutationKey, useCoreApiCreateLift } from "./hooks/useCoreApiCreateLift.ts";
 export { coreApiListExercisesQueryKey, coreApiListExercisesQueryOptions, useCoreApiListExercises } from "./hooks/useCoreApiListExercises.ts";

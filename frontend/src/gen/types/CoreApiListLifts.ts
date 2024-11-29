@@ -1,9 +1,9 @@
-import type { CreateLiftSchema } from "./CreateLiftSchema.ts";
+import type { LiftSchema } from "./LiftSchema.ts";
 
  /**
  * @description OK
 */
-export type CoreApiListLifts200 = CreateLiftSchema[];
+export type CoreApiListLifts200 = LiftSchema[];
 
  export type CoreApiListLiftsQueryResponse = CoreApiListLifts200;
 

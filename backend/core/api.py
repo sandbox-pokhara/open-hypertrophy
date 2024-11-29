@@ -9,6 +9,7 @@ from core.models import Lift
 from core.schema import CreateExerciseSchema
 from core.schema import CreateLiftSchema
 from core.schema import GenericSchema
+from core.schema import LiftSchema
 
 exercises = Router()
 lifts = Router()
@@ -35,7 +36,7 @@ session_auth = SessionAuth(csrf=False)
     "/", auth=session_auth, response={200: list[CreateExerciseSchema]}
 )
 def list_exercises(request: HttpRequest):
-    return 200, Exercise.objects.all()
+    return 200, Exercise.objects.all().order_by("-date_created")
 
 
 @exercises.post("/", auth=session_auth, response={201: GenericSchema})
@@ -44,11 +45,9 @@ def create_exercise(request: HttpRequest, payload: CreateExerciseSchema):
     return 201, {"detail": "Exercise created successfully."}
 
 
-@lifts.get("/", auth=session_auth, response={200: list[CreateLiftSchema]})
+@lifts.get("/", auth=session_auth, response={200: list[LiftSchema]})
 def list_lifts(request: HttpRequest):
-    return 200, Lift.objects.filter(user=request.user).order_by(
-        "-date_created"
-    )
+    return 200, Lift.objects.filter(user=request.user).order_by("date")
 
 
 @lifts.post(

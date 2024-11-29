@@ -1,5 +1,6 @@
 import datetime
 
+from ninja import Field
 from ninja import ModelSchema
 from ninja import Schema
 
@@ -18,6 +19,8 @@ class ExerciseSchema(ModelSchema):
 
 
 class LiftSchema(ModelSchema):
+    exercise__name: str = Field(alias="exercise.name")
+
     class Meta:
         model = Lift
         fields = "__all__"
