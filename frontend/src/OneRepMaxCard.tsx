@@ -20,6 +20,13 @@ import { createOneRepMaxChartData } from "./lib/utils";
 export default function Component() {
   const lifts = useCoreApiListLifts();
   if (lifts.isLoading) return "Loading...";
+  if (
+    lifts.error &&
+    lifts.error.message === "Request failed with status code 401"
+  ) {
+    window.location.href = "/admin/login/?next=/";
+    return null;
+  }
   if (!lifts.data) return JSON.stringify(lifts.error);
 
   const oneRepMax = createOneRepMaxChartData(lifts.data);
