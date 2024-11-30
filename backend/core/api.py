@@ -97,7 +97,10 @@ def create_lift(request: HttpRequest, payload: CreateLiftSchema):
 @users.post("/", response={201: GenericSchema, 400: GenericSchema})
 def create_user(request: HttpRequest, payload: CreateUser):
     u = get_user_model().objects.create_user(
-        username=payload.username, password=payload.password
+        first_name=payload.first_name,
+        last_name=payload.last_name,
+        username=payload.username,
+        password=payload.password,
     )
     u.save()
     return 201, GenericSchema(detail="Success.")

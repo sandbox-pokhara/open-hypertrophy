@@ -14,6 +14,8 @@ import { Link, useNavigate } from "react-router-dom";
 
 export function SignUpForm() {
   let navigate = useNavigate();
+  const [firstName, setFirstName] = useState<string>("");
+  const [lastName, setLastName] = useState<string>("");
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const signUp = useCoreApiCreateUser({
@@ -34,6 +36,32 @@ export function SignUpForm() {
       </CardHeader>
       <CardContent>
         <div className="grid gap-4">
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="grid gap-2">
+              <div className="flex items-center">
+                <Label htmlFor="firstName">First Name</Label>
+              </div>
+              <Input
+                id="firstName"
+                placeholder="John"
+                required
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+              />
+            </div>
+            <div className="grid gap-2">
+              <div className="flex items-center">
+                <Label htmlFor="lastName">Last Name</Label>
+              </div>
+              <Input
+                id="lastName"
+                placeholder="Doe"
+                required
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+              />
+            </div>
+          </div>
           <div className="grid gap-2">
             <Label htmlFor="username">Username</Label>
             <Input
@@ -57,6 +85,7 @@ export function SignUpForm() {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
+
           {signUp.error && (
             <p className="text-[0.8rem] font-medium text-destructive">
               {
@@ -70,7 +99,16 @@ export function SignUpForm() {
             type="submit"
             className="w-full"
             disabled={signUp.isPending}
-            onClick={() => signUp.mutate({ data: { username, password } })}
+            onClick={() =>
+              signUp.mutate({
+                data: {
+                  username,
+                  password,
+                  first_name: firstName,
+                  last_name: lastName,
+                },
+              })
+            }
           >
             {signUp.isPending ? "Loading..." : "Sign Up"}
           </Button>

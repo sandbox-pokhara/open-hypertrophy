@@ -46,6 +46,8 @@ class CreateLiftSchema(Schema):
 
 
 class CreateUser(Schema):
+    first_name: str
+    last_name: str
     username: str
     password: str
 

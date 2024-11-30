@@ -1,1 +1,1 @@
-{"properties":{"username":{"title":"Username","type":"string"},"password":{"title":"Password","type":"string"}},"required":["username","password"],"title":"CreateUser","type":"object","x-readme-ref-name":"CreateUser"}
+{"properties":{"first_name":{"title":"First Name","type":"string"},"last_name":{"title":"Last Name","type":"string"},"username":{"title":"Username","type":"string"},"password":{"title":"Password","type":"string"}},"required":["first_name","last_name","username","password"],"title":"CreateUser","type":"object","x-readme-ref-name":"CreateUser"}
