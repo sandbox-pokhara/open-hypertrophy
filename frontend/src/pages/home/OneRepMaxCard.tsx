@@ -20,8 +20,8 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { useCoreApiListLifts } from "./gen";
-import { createOneRepMaxChartData } from "./lib/utils";
+import { useCoreApiListLifts } from "../../gen";
+import { createOneRepMaxChartData } from "../../lib/utils";
 import { useEffect, useState } from "react";
 
 export default function Component() {

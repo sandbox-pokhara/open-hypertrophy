@@ -1,24 +1,23 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import OneRepMaxCard from "@/OneRepMaxCard";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./pages/home/Home";
+import Login from "./pages/login/Login";
+
 const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: 2 } },
 });
 
 export default function App() {
   return (
-    <div className="m-2">
+    <BrowserRouter>
       <QueryClientProvider client={queryClient}>
-        <OneRepMaxCard />
-        {/* This is a temporary solution // Add a frontend form to add a lift */}
-        <a
-          href="/admin/core/lift/add/"
-          target="_blank"
-          rel="noreferrer"
-          className="font-medium underline underline-offset-4"
-        >
-          Add a Lift
-        </a>
+        <div className="m-2">
+          <Routes>
+            <Route path="/login/" element={<Login />} />
+            <Route path="/" element={<Home />}></Route>
+          </Routes>
+        </div>
       </QueryClientProvider>
-    </div>
+    </BrowserRouter>
   );
 }
