@@ -103,7 +103,7 @@ def create_user(request: HttpRequest, payload: CreateUser):
     return 201, GenericSchema(detail="Success.")
 
 
-@users.get("/current/", response={200: UserSchema})
+@users.get("/current/", auth=session_auth, response={200: UserSchema})
 def retrieve_current_user(request: HttpRequest):
     return 200, request.user
 
