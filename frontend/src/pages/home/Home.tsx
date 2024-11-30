@@ -1,6 +1,17 @@
+import { Button } from "@/components/ui/button";
 import OneRepMaxCard from "./OneRepMaxCard";
+import { useCoreApiLogout } from "@/gen";
+import { useNavigate } from "react-router-dom";
 
 export default function Home() {
+  let navigate = useNavigate();
+  const logout = useCoreApiLogout({
+    mutation: {
+      onSuccess: () => {
+        navigate("/login/");
+      },
+    },
+  });
   return (
     <div>
       <OneRepMaxCard />
@@ -13,6 +24,7 @@ export default function Home() {
       >
         Add a Lift
       </a>
+      <Button onClick={() => logout.mutate()}>Logout</Button>
     </div>
   );
 }

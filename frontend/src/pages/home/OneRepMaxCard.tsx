@@ -23,8 +23,10 @@ import {
 import { useCoreApiListLifts } from "../../gen";
 import { createOneRepMaxChartData } from "../../lib/utils";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Component() {
+  const navigate = useNavigate();
   const lifts = useCoreApiListLifts();
   const [selectedExercise, setSelectedExercise] = useState<string>();
 
@@ -44,8 +46,7 @@ export default function Component() {
     lifts.error &&
     lifts.error.message === "Request failed with status code 401"
   ) {
-    window.location.href = "/admin/login/?next=/";
-    return null;
+    navigate("/login/");
   }
   if (lifts.error) return lifts.error.message;
   if (lifts.data && lifts.data.length === 0) return "No lifts found.";
