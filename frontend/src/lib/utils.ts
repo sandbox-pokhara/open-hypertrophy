@@ -11,27 +11,30 @@ export function cn(...inputs: ClassValue[]) {
 
 type ChartData = {
   date: string;
-  [exercise: number]: number | string;
+  value: number;
 };
 
-export function createOneRepMaxChartData(data: LiftSchema[]) {
+export function createOneRepMaxChartData(
+  data: LiftSchema[],
+  exerciseId: number
+) {
   // Extract dates and group data by date and exercise
-  const groupedByDate: { [key: string]: { [exercise: number]: number } } = {};
+  const groupedByDate: Record<string, number> = {};
   const uniqueExercises: Set<number> = new Set();
-  const exerciseIdToNameMap: Map<number, string> = new Map();
+  const exerciseIdToNameMap: Record<number, string> = {};
 
   data.forEach((entry) => {
     if (entry.date === undefined) return;
     uniqueExercises.add(entry.exercise);
-    exerciseIdToNameMap.set(entry.exercise, entry.exercise__name);
+    exerciseIdToNameMap[entry.exercise] = entry.exercise__name;
+    if (entry.exercise !== exerciseId) return;
     const date = entry.date.split("T")[0]; // Extract only the date part
-    if (!groupedByDate[date]) {
-      groupedByDate[date] = {};
-    }
-    groupedByDate[date][entry.exercise] = Math.round(
+    groupedByDate[date] = Math.round(
       (entry.weight || 0) / (1.0278 - 0.0278 * (entry.repitions || 0))
     );
   });
+
+  const exerciseIds = Array.from(uniqueExercises);
 
   // Find min and max dates
   const allDates = Object.keys(groupedByDate).map((date) => parseISO(date));
@@ -43,35 +46,29 @@ export function createOneRepMaxChartData(data: LiftSchema[]) {
 
   // Fill missing dates with the last known lift values
   const chartData: ChartData[] = [];
-  const exerciseList = Array.from(uniqueExercises);
 
-  let lastKnownValues: { [exercise: string]: number } = {};
-  exerciseList.forEach((i) => (lastKnownValues[i] = 0));
+  let lastKnownValue = 0;
 
   dateRange.forEach((date) => {
     const formattedDate = format(date, "yyyy-MM-dd");
 
     if (groupedByDate[formattedDate]) {
       // Update last known values with the current date's values
-      lastKnownValues = { ...lastKnownValues, ...groupedByDate[formattedDate] };
+      lastKnownValue = groupedByDate[formattedDate];
     }
 
     // Add to the result, using last known values for missing lifts
     chartData.push({
       date: formattedDate,
-      ...lastKnownValues,
+      value: lastKnownValue,
     });
   });
 
-  const chartConfig: ChartConfig = {};
-
-  exerciseList.forEach(
-    (e, i) =>
-      (chartConfig[e] = {
-        label: exerciseIdToNameMap.get(e),
-        color: `hsl(var(--chart-${(i % 5) + 1}))`,
-      })
-  );
-
-  return { exerciseList, chartConfig, chartData };
+  const chartConfig: ChartConfig = {
+    value: {
+      label: exerciseIdToNameMap[exerciseId],
+      color: "hsl(var(--chart-1))",
+    },
+  };
+  return { exerciseIds, exerciseIdToNameMap, chartConfig, chartData };
 }

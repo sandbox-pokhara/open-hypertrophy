@@ -1,5 +1,11 @@
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
-
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Card,
   CardContent,
@@ -16,10 +22,24 @@ import {
 } from "@/components/ui/chart";
 import { useCoreApiListLifts } from "./gen";
 import { createOneRepMaxChartData } from "./lib/utils";
+import { useEffect, useState } from "react";
 
 export default function Component() {
   const lifts = useCoreApiListLifts();
-  if (lifts.isLoading) return "Loading...";
+  const [selectedExercise, setSelectedExercise] = useState<string>();
+
+  // set selected exercise to first lift data
+  useEffect(() => {
+    if (
+      !selectedExercise &&
+      lifts.data &&
+      lifts.data.length > 0 &&
+      lifts.data[0].id
+    ) {
+      setSelectedExercise(lifts.data[0].exercise.toString());
+    }
+  }, [lifts.data]);
+
   if (
     lifts.error &&
     lifts.error.message === "Request failed with status code 401"
@@ -27,22 +47,49 @@ export default function Component() {
     window.location.href = "/admin/login/?next=/";
     return null;
   }
-  if (!lifts.data) return JSON.stringify(lifts.error);
+  if (lifts.error) return lifts.error.message;
+  if (lifts.data && lifts.data.length === 0) return "No lifts found.";
+  if (lifts.isLoading || !lifts.data || !selectedExercise) return "Loading...";
 
-  const oneRepMax = createOneRepMaxChartData(lifts.data);
+  const chart = createOneRepMaxChartData(
+    lifts.data,
+    parseInt(selectedExercise)
+  );
+
   return (
-    <Card className="max-w-[500px]">
+    <Card>
       <CardHeader>
-        <CardTitle>One Repetition Max</CardTitle>
-        <CardDescription>
-          Showing estimated one rep max for all exercises using Brzycki formula
-        </CardDescription>
+        <div className="grid flex-1 gap-1 text-center sm:text-left">
+          <CardTitle>One Repetition Max</CardTitle>
+          <CardDescription>
+            Showing estimated one rep max for all exercises using Brzycki
+            formula
+          </CardDescription>
+          <Select value={selectedExercise} onValueChange={setSelectedExercise}>
+            <SelectTrigger
+              className="w-[160px] rounded-lg sm:ml-auto"
+              aria-label="Select a value"
+            >
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent className="rounded-xl">
+              {chart.exerciseIds.map((i) => (
+                <SelectItem key={i} value={i.toString()} className="rounded-lg">
+                  {chart.exerciseIdToNameMap[i]}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={oneRepMax.chartConfig}>
+        <ChartContainer
+          config={chart.chartConfig}
+          className="aspect-auto h-[250px] w-full"
+        >
           <AreaChart
             accessibilityLayer
-            data={oneRepMax.chartData}
+            data={chart.chartData}
             margin={{ left: 12, right: 12 }}
           >
             <CartesianGrid vertical={false} />
@@ -51,43 +98,30 @@ export default function Component() {
               tickLine={false}
               axisLine={false}
               tickMargin={8}
-              tickFormatter={(value) => value.slice(0, 3)}
             />
             <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
             <defs>
-              {oneRepMax.exerciseList.map((e) => (
-                <linearGradient
-                  key={e}
-                  id={`fillChart${e}`}
-                  x1="0"
-                  y1="0"
-                  x2="0"
-                  y2="1"
-                >
-                  <stop
-                    offset="5%"
-                    stopColor={`var(--color-${e}`}
-                    stopOpacity={0.8}
-                  />
-                  <stop
-                    offset="95%"
-                    stopColor={`var(--color-${e}`}
-                    stopOpacity={0.1}
-                  />
-                </linearGradient>
-              ))}
+              <linearGradient id="fillChart" x1="0" y1="0" x2="0" y2="1">
+                <stop
+                  offset="5%"
+                  stopColor={`var(--color-value`}
+                  stopOpacity={0.8}
+                />
+                <stop
+                  offset="95%"
+                  stopColor={`var(--color-value`}
+                  stopOpacity={0.1}
+                />
+              </linearGradient>
             </defs>
 
-            {oneRepMax.exerciseList.map((e) => (
-              <Area
-                key={e}
-                dataKey={e}
-                type="linear"
-                fill={`url(#fillChart${e})`}
-                fillOpacity={0.4}
-                stroke={`var(--color-${e}`}
-              />
-            ))}
+            <Area
+              dataKey="value"
+              type="linear"
+              fill="url(#fillChart)"
+              fillOpacity={0.4}
+              stroke="var(--color-value)"
+            />
             <ChartLegend content={<ChartLegendContent />} />
           </AreaChart>
         </ChartContainer>
