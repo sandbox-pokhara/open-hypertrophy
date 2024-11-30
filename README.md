@@ -8,7 +8,7 @@ This project is currently under construction and may not be fully functional or 
 
 ## 🎥 Demo
 
-- Link: https://hypertrophy.sandbox.com.np
+- Link: https://hypertrophy.sandbox.com.np/login/
 - Username: `demo`
 - Password: `demo`
 
