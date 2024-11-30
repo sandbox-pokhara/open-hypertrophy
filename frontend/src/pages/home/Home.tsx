@@ -24,7 +24,9 @@ export default function Home() {
       >
         Add a Lift
       </a>
-      <Button onClick={() => logout.mutate()}>Logout</Button>
+      <Button onClick={() => logout.mutate()} disabled={logout.isPending}>
+        {logout.isPending ? "Loading..." : "Logout"}
+      </Button>
     </div>
   );
 }

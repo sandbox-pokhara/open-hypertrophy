@@ -8,18 +8,18 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useCoreApiLogin } from "@/gen";
+import { useCoreApiCreateUser } from "@/gen";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-export function LoginForm() {
+export function SignUpForm() {
   let navigate = useNavigate();
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const login = useCoreApiLogin({
+  const signUp = useCoreApiCreateUser({
     mutation: {
-      onSuccess(data, variables, context) {
-        navigate("/");
+      onSuccess() {
+        navigate("/login/");
       },
     },
   });
@@ -27,9 +27,9 @@ export function LoginForm() {
   return (
     <Card className="mx-auto max-w-sm">
       <CardHeader>
-        <CardTitle className="text-2xl">Login</CardTitle>
+        <CardTitle className="text-2xl">Create an account</CardTitle>
         <CardDescription>
-          Enter your credentials below to login to your account
+          Enter your username and password below to create your account
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -57,11 +57,11 @@ export function LoginForm() {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          {login.error && (
+          {signUp.error && (
             <p className="text-[0.8rem] font-medium text-destructive">
               {
                 // @ts-ignore
-                login.error.status === 400 && login.error.response.data.detail
+                signUp.error.status === 400 && signUp.error.response.data.detail
               }
             </p>
           )}
@@ -69,16 +69,16 @@ export function LoginForm() {
           <Button
             type="submit"
             className="w-full"
-            disabled={login.isPending}
-            onClick={() => login.mutate({ data: { username, password } })}
+            disabled={signUp.isPending}
+            onClick={() => signUp.mutate({ data: { username, password } })}
           >
-            {login.isPending ? "Loading..." : "Login"}
+            {signUp.isPending ? "Loading..." : "Sign Up"}
           </Button>
         </div>
         <div className="mt-4 text-center text-sm">
-          Don&apos;t have an account?{" "}
-          <Link to="/sign-up/" className="underline">
-            Sign up
+          Already have an account?{" "}
+          <Link to="/login/" className="underline">
+            Login
           </Link>
         </div>
       </CardContent>
