@@ -23,6 +23,7 @@ from core.schema import CreateUser
 from core.schema import GenericSchema
 from core.schema import LiftSchema
 from core.schema import Login
+from core.schema import UserSchema
 
 exercises = Router()
 lifts = Router()
@@ -100,6 +101,11 @@ def create_user(request: HttpRequest, payload: CreateUser):
     )
     u.save()
     return 201, GenericSchema(detail="Success.")
+
+
+@users.get("/current/", response={200: UserSchema})
+def retrieve_current_user(request: HttpRequest):
+    return 200, request.user
 
 
 @users.post("/login/", response={200: GenericSchema, 400: GenericSchema})

@@ -1,5 +1,6 @@
 import datetime
 
+from django.contrib.auth import get_user_model
 from ninja import Field
 from ninja import ModelSchema
 from ninja import Schema
@@ -24,6 +25,13 @@ class LiftSchema(ModelSchema):
     class Meta:
         model = Lift
         fields = "__all__"
+
+
+class UserSchema(ModelSchema):
+    class Meta:
+        model = get_user_model()
+        fields = "__all__"
+        exclude = ["password"]
 
 
 class CreateExerciseSchema(Schema):
