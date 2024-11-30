@@ -46,7 +46,7 @@ class LiftAdmin(admin.ModelAdmin[Lift]):
         "date",
         "user",
         "exercise",
-        "repitions",
+        "repetitions",
         "weight",
         "estimated_1rm",
     ]
@@ -57,7 +57,7 @@ class LiftAdmin(admin.ModelAdmin[Lift]):
         # Brzycki formula
         # 1RM = W / (1.0278 - 0.0278 × R), where W is the weight lifted and R is the number of repetitions.
         # The Brzycki formula is considered the gold standard for estimating your 1RM.
-        return round(obj.weight / (1.0278 - 0.0278 * obj.repitions), 2)
+        return round(obj.weight / (1.0278 - 0.0278 * obj.repetitions), 2)
 
     # automatically set created_by to logged in user
     def save_model(

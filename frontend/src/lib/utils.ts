@@ -30,7 +30,7 @@ export function createOneRepMaxChartData(
     if (entry.exercise !== exerciseId) return;
     const date = entry.date.split("T")[0]; // Extract only the date part
     groupedByDate[date] = Math.round(
-      (entry.weight || 0) / (1.0278 - 0.0278 * (entry.repitions || 0))
+      (entry.weight || 0) / (1.0278 - 0.0278 * (entry.repetitions || 0))
     );
   });
 

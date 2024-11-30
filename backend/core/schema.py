@@ -32,6 +32,6 @@ class CreateExerciseSchema(Schema):
 
 class CreateLiftSchema(Schema):
     exercise_id: int
-    repitions: int = 8
+    repetitions: int = 8
     weight: int = 50
     date: datetime.datetime

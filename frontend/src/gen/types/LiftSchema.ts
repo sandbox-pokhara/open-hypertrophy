@@ -20,7 +20,7 @@ export type LiftSchema = {
      * @default 8
      * @type integer | undefined
     */
-    repitions?: number;
+    repetitions?: number;
     /**
      * @default 50
      * @type integer | undefined

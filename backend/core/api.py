@@ -60,7 +60,7 @@ def create_lift(request: HttpRequest, payload: CreateLiftSchema):
             user=request.user,
             date=payload.date,
             exercise=exercise,
-            repitions=payload.repitions,
+            repetitions=payload.repetitions,
             weight=payload.weight,
         )
 

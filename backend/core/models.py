@@ -17,7 +17,7 @@ class Lift(models.Model):
     user = models.ForeignKey(get_user_model(), on_delete=models.PROTECT)
     date = models.DateTimeField(default=timezone.now)
     exercise = models.ForeignKey(Exercise, on_delete=models.PROTECT)
-    repitions = models.PositiveSmallIntegerField(default=8)
+    repetitions = models.PositiveSmallIntegerField(default=8)
     weight = models.PositiveSmallIntegerField(default=50)
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now_add=True)
