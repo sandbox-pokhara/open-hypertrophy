@@ -35,3 +35,18 @@ class CreateLiftSchema(Schema):
     repetitions: int = 8
     weight: int = 50
     date: datetime.datetime
+
+
+class CreateUser(Schema):
+    username: str
+    password: str
+
+
+class Login(Schema):
+    username: str
+    password: str
+
+
+class ChangePassword(Schema):
+    current_password: str
+    new_password: str
