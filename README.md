@@ -2,19 +2,37 @@
 
 An open-source web-based strength tracker for hypertrophy
 
-Note: This project is under construction.
+## 🚧 Disclaimer
 
-## Demo
+This project is currently under construction and may not be fully functional or stable. Expect frequent updates and changes as we continue to develop and improve it. Contributions are welcome.
+
+## 🎥 Demo
 
 - Link: https://hypertrophy.sandbox.com.np
 - Username: `demo`
 - Password: `demo`
 
-## Concept
+## 💡 Concept
 
 ![Concept](excalidraws/concept.excalidraw.png)
 
-## Run Locally using Docker
+## 🌟 Feature Requests
+
+Got an idea to make this project even better? We'd love to hear from you!
+
+### How to Submit a Feature Request
+
+1. Check the Issues tab to see if your idea has already been suggested.
+1. Provide a clear and detailed description of your idea. Feel free to include:
+   - The problem it solves
+   - Why it's useful
+   - Any potential implementation suggestions
+
+## 📚 API Documentation
+
+https://hypertrophy.sandbox.com.np/api/v1/docs/
+
+## 🖥️ Run Locally using Docker
 
 1. Download `docker-compose.yml`.
 1. Start the server.
@@ -28,6 +46,6 @@ Note: This project is under construction.
    docker compose exec python manage.py createsuperuser
    ```
 
-## License
+## 📜 License
 
 This project is licensed under the terms of the MIT license.
