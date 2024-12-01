@@ -7,19 +7,47 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { useCoreApiLogin } from "@/gen";
-import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+
+const formSchema = z.object({
+  username: z.string(),
+  password: z.string(),
+});
 
 export function LoginForm() {
   let navigate = useNavigate();
-  const [username, setUsername] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+  });
+
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    login.mutate({
+      data: { username: values.username, password: values.password },
+    });
+  }
+
   const login = useCoreApiLogin({
     mutation: {
       onSuccess() {
         navigate("/");
+      },
+      onError(error) {
+        form.setError("password", { type: "server", message: error.detail });
       },
     },
   });
@@ -33,45 +61,46 @@ export function LoginForm() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="grid gap-4">
-          <div className="grid gap-2">
-            <Label htmlFor="username">Username</Label>
-            <Input
-              id="username"
-              type="username"
-              placeholder="johndoe"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-            />
-          </div>
-          <div className="grid gap-2">
-            <div className="flex items-center">
-              <Label htmlFor="password">Password</Label>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            <div className="grid gap-4">
+              <FormField
+                control={form.control}
+                name="username"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Username</FormLabel>
+                    <FormControl>
+                      <Input required placeholder="johndoe" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <Input required type="password" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button
+                type="submit"
+                className="w-full"
+                disabled={login.isPending}
+              >
+                {login.isPending ? "Loading..." : "Login"}
+              </Button>
             </div>
-            <Input
-              id="password"
-              type="password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
-          {login.error && (
-            <p className="text-[0.8rem] font-medium text-destructive">
-              {login.error.detail}
-            </p>
-          )}
+          </form>
+        </Form>
 
-          <Button
-            type="submit"
-            className="w-full"
-            disabled={login.isPending}
-            onClick={() => login.mutate({ data: { username, password } })}
-          >
-            {login.isPending ? "Loading..." : "Login"}
-          </Button>
-        </div>
         <div className="mt-4 text-center text-sm">
           Don&apos;t have an account?{" "}
           <Link to="/sign-up/" className="underline">
