@@ -106,6 +106,8 @@ def create_lift(request: HttpRequest, payload: CreateLiftSchema):
 
 @users.post("/", response={201: GenericSchema, 400: GenericSchema})
 def create_user(request: HttpRequest, payload: CreateUser):
+    if get_user_model().objects.filter(username=payload.username).exists():
+        return 400, GenericSchema(detail="Username is already used.")
     u = get_user_model().objects.create_user(
         first_name=payload.first_name,
         last_name=payload.last_name,
