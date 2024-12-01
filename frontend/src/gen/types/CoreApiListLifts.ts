@@ -1,3 +1,4 @@
+import type { GenericSchema } from "./GenericSchema.ts";
 import type { LiftSchema } from "./LiftSchema.ts";
 
  /**
@@ -5,9 +6,14 @@ import type { LiftSchema } from "./LiftSchema.ts";
 */
 export type CoreApiListLifts200 = LiftSchema[];
 
+ /**
+ * @description Unauthorized
+*/
+export type CoreApiListLifts401 = GenericSchema;
+
  export type CoreApiListLiftsQueryResponse = CoreApiListLifts200;
 
  export type CoreApiListLiftsQuery = {
     Response: CoreApiListLifts200;
-    Errors: any;
+    Errors: CoreApiListLifts401;
 };

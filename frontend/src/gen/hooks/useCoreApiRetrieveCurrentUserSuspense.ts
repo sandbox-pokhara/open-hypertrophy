@@ -1,7 +1,7 @@
-import client from "@kubb/plugin-client/client";
-import type { RequestConfig } from "@kubb/plugin-client/client";
+import client from "../../lib/client.ts";
+import type { RequestConfig } from "../../lib/client.ts";
 import type { QueryKey, UseSuspenseQueryOptions, UseSuspenseQueryResult } from "@tanstack/react-query";
-import type { CoreApiRetrieveCurrentUserQueryResponse } from "../types/CoreApiRetrieveCurrentUser.ts";
+import type { CoreApiRetrieveCurrentUserQueryResponse, CoreApiRetrieveCurrentUser401 } from "../types/CoreApiRetrieveCurrentUser.ts";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 
  export const coreApiRetrieveCurrentUserSuspenseQueryKey = () => [{ url: "/api/v1/users/current/" }] as const;
@@ -13,7 +13,7 @@ import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
  * {@link /api/v1/users/current/}
  */
 async function coreApiRetrieveCurrentUser(config: Partial<RequestConfig> = {}) {
-    const res = await client<CoreApiRetrieveCurrentUserQueryResponse, Error, unknown>({ method: "GET", url: `/api/v1/users/current/`, ...config });
+    const res = await client<CoreApiRetrieveCurrentUserQueryResponse, CoreApiRetrieveCurrentUser401, unknown>({ method: "GET", url: `/api/v1/users/current/`, ...config });
     return res.data;
 }
 
@@ -33,7 +33,7 @@ async function coreApiRetrieveCurrentUser(config: Partial<RequestConfig> = {}) {
  * {@link /api/v1/users/current/}
  */
 export function useCoreApiRetrieveCurrentUserSuspense<TData = CoreApiRetrieveCurrentUserQueryResponse, TQueryData = CoreApiRetrieveCurrentUserQueryResponse, TQueryKey extends QueryKey = CoreApiRetrieveCurrentUserSuspenseQueryKey>(options: {
-    query?: Partial<UseSuspenseQueryOptions<CoreApiRetrieveCurrentUserQueryResponse, Error, TData, TQueryKey>>;
+    query?: Partial<UseSuspenseQueryOptions<CoreApiRetrieveCurrentUserQueryResponse, CoreApiRetrieveCurrentUser401, TData, TQueryKey>>;
     client?: Partial<RequestConfig>;
 } = {}) {
     const { query: queryOptions, client: config = {} } = options ?? {};
@@ -42,7 +42,7 @@ export function useCoreApiRetrieveCurrentUserSuspense<TData = CoreApiRetrieveCur
         ...coreApiRetrieveCurrentUserSuspenseQueryOptions(config) as unknown as UseSuspenseQueryOptions,
         queryKey,
         ...queryOptions as unknown as Omit<UseSuspenseQueryOptions, "queryKey">
-    }) as UseSuspenseQueryResult<TData, Error> & {
+    }) as UseSuspenseQueryResult<TData, CoreApiRetrieveCurrentUser401> & {
         queryKey: TQueryKey;
     };
     query.queryKey = queryKey as TQueryKey;

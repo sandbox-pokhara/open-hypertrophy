@@ -7,6 +7,11 @@ import type { GenericSchema } from "./GenericSchema.ts";
 export type CoreApiCreateLift201 = GenericSchema;
 
  /**
+ * @description Unauthorized
+*/
+export type CoreApiCreateLift401 = GenericSchema;
+
+ /**
  * @description Not Found
 */
 export type CoreApiCreateLift404 = GenericSchema;
@@ -18,5 +23,5 @@ export type CoreApiCreateLift404 = GenericSchema;
  export type CoreApiCreateLiftMutation = {
     Response: CoreApiCreateLift201;
     Request: CoreApiCreateLiftMutationRequest;
-    Errors: CoreApiCreateLift404;
+    Errors: CoreApiCreateLift401 | CoreApiCreateLift404;
 };

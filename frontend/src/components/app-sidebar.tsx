@@ -109,11 +109,7 @@ const data = {
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   let navigate = useNavigate();
   const user = useCoreApiRetrieveCurrentUser();
-
-  if (
-    user.error &&
-    user.error.message === "Request failed with status code 401"
-  ) {
+  if (user.error && user.error.detail === "Unauthorized") {
     navigate("/login/");
   }
   return (

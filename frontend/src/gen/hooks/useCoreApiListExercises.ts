@@ -1,7 +1,7 @@
-import client from "@kubb/plugin-client/client";
-import type { RequestConfig } from "@kubb/plugin-client/client";
+import client from "../../lib/client.ts";
+import type { RequestConfig } from "../../lib/client.ts";
 import type { QueryKey, QueryObserverOptions, UseQueryResult } from "@tanstack/react-query";
-import type { CoreApiListExercisesQueryResponse } from "../types/CoreApiListExercises.ts";
+import type { CoreApiListExercisesQueryResponse, CoreApiListExercises401 } from "../types/CoreApiListExercises.ts";
 import { queryOptions, useQuery } from "@tanstack/react-query";
 
  export const coreApiListExercisesQueryKey = () => [{ url: "/api/v1/exercises/" }] as const;
@@ -13,7 +13,7 @@ import { queryOptions, useQuery } from "@tanstack/react-query";
  * {@link /api/v1/exercises/}
  */
 async function coreApiListExercises(config: Partial<RequestConfig> = {}) {
-    const res = await client<CoreApiListExercisesQueryResponse, Error, unknown>({ method: "GET", url: `/api/v1/exercises/`, ...config });
+    const res = await client<CoreApiListExercisesQueryResponse, CoreApiListExercises401, unknown>({ method: "GET", url: `/api/v1/exercises/`, ...config });
     return res.data;
 }
 
@@ -33,7 +33,7 @@ async function coreApiListExercises(config: Partial<RequestConfig> = {}) {
  * {@link /api/v1/exercises/}
  */
 export function useCoreApiListExercises<TData = CoreApiListExercisesQueryResponse, TQueryData = CoreApiListExercisesQueryResponse, TQueryKey extends QueryKey = CoreApiListExercisesQueryKey>(options: {
-    query?: Partial<QueryObserverOptions<CoreApiListExercisesQueryResponse, Error, TData, TQueryData, TQueryKey>>;
+    query?: Partial<QueryObserverOptions<CoreApiListExercisesQueryResponse, CoreApiListExercises401, TData, TQueryData, TQueryKey>>;
     client?: Partial<RequestConfig>;
 } = {}) {
     const { query: queryOptions, client: config = {} } = options ?? {};
@@ -42,7 +42,7 @@ export function useCoreApiListExercises<TData = CoreApiListExercisesQueryRespons
         ...coreApiListExercisesQueryOptions(config) as unknown as QueryObserverOptions,
         queryKey,
         ...queryOptions as unknown as Omit<QueryObserverOptions, "queryKey">
-    }) as UseQueryResult<TData, Error> & {
+    }) as UseQueryResult<TData, CoreApiListExercises401> & {
         queryKey: TQueryKey;
     };
     query.queryKey = queryKey as TQueryKey;

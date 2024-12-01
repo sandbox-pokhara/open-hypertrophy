@@ -36,13 +36,10 @@ export default function Component() {
     }
   }, [lifts.data]);
 
-  if (
-    lifts.error &&
-    lifts.error.message === "Request failed with status code 401"
-  ) {
+  if (lifts.error && lifts.error.detail === "Unauthorized.") {
     navigate("/login/");
   }
-  if (lifts.error) return lifts.error.message;
+  if (lifts.error) return lifts.error.detail;
   if (lifts.data && lifts.data.length === 0) return "No lifts found.";
   if (lifts.isLoading || !lifts.data || !selectedExercise) return "Loading...";
 

@@ -88,10 +88,7 @@ export function SignUpForm() {
 
           {signUp.error && (
             <p className="text-[0.8rem] font-medium text-destructive">
-              {
-                // @ts-ignore
-                signUp.error.status === 400 && signUp.error.response.data.detail
-              }
+              {signUp.error.detail}
             </p>
           )}
 

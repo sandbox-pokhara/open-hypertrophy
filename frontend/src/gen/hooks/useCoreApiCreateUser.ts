@@ -1,5 +1,5 @@
-import client from "@kubb/plugin-client/client";
-import type { RequestConfig } from "@kubb/plugin-client/client";
+import client from "../../lib/client.ts";
+import type { RequestConfig } from "../../lib/client.ts";
 import type { UseMutationOptions } from "@tanstack/react-query";
 import type { CoreApiCreateUserMutationRequest, CoreApiCreateUserMutationResponse, CoreApiCreateUser400 } from "../types/CoreApiCreateUser.ts";
 import { useMutation } from "@tanstack/react-query";

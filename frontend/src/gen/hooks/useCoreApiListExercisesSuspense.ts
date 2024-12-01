@@ -1,7 +1,7 @@
-import client from "@kubb/plugin-client/client";
-import type { RequestConfig } from "@kubb/plugin-client/client";
+import client from "../../lib/client.ts";
+import type { RequestConfig } from "../../lib/client.ts";
 import type { QueryKey, UseSuspenseQueryOptions, UseSuspenseQueryResult } from "@tanstack/react-query";
-import type { CoreApiListExercisesQueryResponse } from "../types/CoreApiListExercises.ts";
+import type { CoreApiListExercisesQueryResponse, CoreApiListExercises401 } from "../types/CoreApiListExercises.ts";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 
  export const coreApiListExercisesSuspenseQueryKey = () => [{ url: "/api/v1/exercises/" }] as const;
@@ -13,7 +13,7 @@ import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
  * {@link /api/v1/exercises/}
  */
 async function coreApiListExercises(config: Partial<RequestConfig> = {}) {
-    const res = await client<CoreApiListExercisesQueryResponse, Error, unknown>({ method: "GET", url: `/api/v1/exercises/`, ...config });
+    const res = await client<CoreApiListExercisesQueryResponse, CoreApiListExercises401, unknown>({ method: "GET", url: `/api/v1/exercises/`, ...config });
     return res.data;
 }
 
@@ -33,7 +33,7 @@ async function coreApiListExercises(config: Partial<RequestConfig> = {}) {
  * {@link /api/v1/exercises/}
  */
 export function useCoreApiListExercisesSuspense<TData = CoreApiListExercisesQueryResponse, TQueryData = CoreApiListExercisesQueryResponse, TQueryKey extends QueryKey = CoreApiListExercisesSuspenseQueryKey>(options: {
-    query?: Partial<UseSuspenseQueryOptions<CoreApiListExercisesQueryResponse, Error, TData, TQueryKey>>;
+    query?: Partial<UseSuspenseQueryOptions<CoreApiListExercisesQueryResponse, CoreApiListExercises401, TData, TQueryKey>>;
     client?: Partial<RequestConfig>;
 } = {}) {
     const { query: queryOptions, client: config = {} } = options ?? {};
@@ -42,7 +42,7 @@ export function useCoreApiListExercisesSuspense<TData = CoreApiListExercisesQuer
         ...coreApiListExercisesSuspenseQueryOptions(config) as unknown as UseSuspenseQueryOptions,
         queryKey,
         ...queryOptions as unknown as Omit<UseSuspenseQueryOptions, "queryKey">
-    }) as UseSuspenseQueryResult<TData, Error> & {
+    }) as UseSuspenseQueryResult<TData, CoreApiListExercises401> & {
         queryKey: TQueryKey;
     };
     query.queryKey = queryKey as TQueryKey;

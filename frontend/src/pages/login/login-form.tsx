@@ -18,7 +18,7 @@ export function LoginForm() {
   const [password, setPassword] = useState<string>("");
   const login = useCoreApiLogin({
     mutation: {
-      onSuccess(data, variables, context) {
+      onSuccess() {
         navigate("/");
       },
     },
@@ -59,10 +59,7 @@ export function LoginForm() {
           </div>
           {login.error && (
             <p className="text-[0.8rem] font-medium text-destructive">
-              {
-                // @ts-ignore
-                login.error.status === 400 && login.error.response.data.detail
-              }
+              {login.error.detail}
             </p>
           )}
 

@@ -6,6 +6,11 @@ import type { GenericSchema } from "./GenericSchema.ts";
 */
 export type CoreApiCreateExercise201 = GenericSchema;
 
+ /**
+ * @description Unauthorized
+*/
+export type CoreApiCreateExercise401 = GenericSchema;
+
  export type CoreApiCreateExerciseMutationRequest = CreateExerciseSchema;
 
  export type CoreApiCreateExerciseMutationResponse = CoreApiCreateExercise201;
@@ -13,5 +18,5 @@ export type CoreApiCreateExercise201 = GenericSchema;
  export type CoreApiCreateExerciseMutation = {
     Response: CoreApiCreateExercise201;
     Request: CoreApiCreateExerciseMutationRequest;
-    Errors: any;
+    Errors: CoreApiCreateExercise401;
 };

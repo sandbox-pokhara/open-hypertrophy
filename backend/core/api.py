@@ -58,25 +58,35 @@ session_auth = SessionAuth(csrf=False)
 
 
 @exercises.get(
-    "/", auth=session_auth, response={200: list[CreateExerciseSchema]}
+    "/",
+    auth=session_auth,
+    response={200: list[CreateExerciseSchema], 401: GenericSchema},
 )
 def list_exercises(request: HttpRequest):
     return 200, Exercise.objects.all().order_by("-date_created")
 
 
-@exercises.post("/", auth=session_auth, response={201: GenericSchema})
+@exercises.post(
+    "/", auth=session_auth, response={201: GenericSchema, 401: GenericSchema}
+)
 def create_exercise(request: HttpRequest, payload: CreateExerciseSchema):
     Exercise.objects.create(name=payload.name, created_by=request.user)
     return 201, {"detail": "Exercise created successfully."}
 
 
-@lifts.get("/", auth=session_auth, response={200: list[LiftSchema]})
+@lifts.get(
+    "/",
+    auth=session_auth,
+    response={200: list[LiftSchema], 401: GenericSchema},
+)
 def list_lifts(request: HttpRequest):
     return 200, Lift.objects.filter(user=request.user).order_by("date")
 
 
 @lifts.post(
-    "/", auth=session_auth, response={201: GenericSchema, 404: GenericSchema}
+    "/",
+    auth=session_auth,
+    response={201: GenericSchema, 404: GenericSchema, 401: GenericSchema},
 )
 def create_lift(request: HttpRequest, payload: CreateLiftSchema):
     try:
@@ -106,7 +116,11 @@ def create_user(request: HttpRequest, payload: CreateUser):
     return 201, GenericSchema(detail="Success.")
 
 
-@users.get("/current/", auth=session_auth, response={200: UserSchema})
+@users.get(
+    "/current/",
+    auth=session_auth,
+    response={200: UserSchema, 401: GenericSchema},
+)
 def retrieve_current_user(request: HttpRequest):
     return 200, request.user
 
@@ -134,7 +148,7 @@ def logout(request: HttpRequest):
 @users.post(
     "/change-password/",
     auth=session_auth,
-    response={200: GenericSchema, 400: GenericSchema},
+    response={200: GenericSchema, 400: GenericSchema, 401: GenericSchema},
 )
 def change_password(request: HttpRequest, payload: ChangePassword):
     user = cast(AbstractBaseUser, request.user)

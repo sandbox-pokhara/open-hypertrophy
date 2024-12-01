@@ -12,5 +12,9 @@ export default defineConfig({
     path: "./src/gen",
     clean: true,
   },
-  plugins: [pluginOas(), pluginTs(), pluginReactQuery()],
+  plugins: [
+    pluginOas(),
+    pluginTs(),
+    pluginReactQuery({ client: { importPath: "../../lib/client.ts" } }),
+  ],
 });

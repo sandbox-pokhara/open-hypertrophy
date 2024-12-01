@@ -11,6 +11,11 @@ export type CoreApiChangePassword200 = GenericSchema;
 */
 export type CoreApiChangePassword400 = GenericSchema;
 
+ /**
+ * @description Unauthorized
+*/
+export type CoreApiChangePassword401 = GenericSchema;
+
  export type CoreApiChangePasswordMutationRequest = ChangePassword;
 
  export type CoreApiChangePasswordMutationResponse = CoreApiChangePassword200;
@@ -18,5 +23,5 @@ export type CoreApiChangePassword400 = GenericSchema;
  export type CoreApiChangePasswordMutation = {
     Response: CoreApiChangePassword200;
     Request: CoreApiChangePasswordMutationRequest;
-    Errors: CoreApiChangePassword400;
+    Errors: CoreApiChangePassword400 | CoreApiChangePassword401;
 };
