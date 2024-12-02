@@ -1,4 +1,5 @@
 export type LiftSchema = {
+    exercise__category__name?: (string | null);
     /**
      * @type string
     */

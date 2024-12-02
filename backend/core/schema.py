@@ -27,6 +27,9 @@ class ExerciseSchema(ModelSchema):
 
 
 class LiftSchema(ModelSchema):
+    exercise__category__name: str | None = Field(
+        None, alias="exercise.category.name"
+    )
     exercise__name: str = Field(alias="exercise.name")
 
     class Meta:

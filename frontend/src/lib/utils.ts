@@ -11,30 +11,28 @@ export function cn(...inputs: ClassValue[]) {
 
 type ChartData = {
   date: string;
-  value: number;
+  [exercise: number]: number | string;
 };
 
-export function createOneRepMaxChartData(
-  data: LiftSchema[],
-  exerciseId: number
-) {
+export function createOneRepMaxChartData(data: LiftSchema[], category: string) {
   // Extract dates and group data by date and exercise
-  const groupedByDate: Record<string, number> = {};
+  const groupedByDate: { [key: string]: { [exercise: number]: number } } = {};
   const uniqueExercises: Set<number> = new Set();
   const exerciseIdToNameMap: Record<number, string> = {};
 
   data.forEach((entry) => {
     if (entry.date === undefined) return;
+    if (entry.exercise__category__name !== category) return;
     uniqueExercises.add(entry.exercise);
     exerciseIdToNameMap[entry.exercise] = entry.exercise__name;
-    if (entry.exercise !== exerciseId) return;
     const date = entry.date.split("T")[0]; // Extract only the date part
-    groupedByDate[date] = Math.round(
+    if (!groupedByDate[date]) {
+      groupedByDate[date] = {};
+    }
+    groupedByDate[date][entry.exercise] = Math.round(
       (entry.weight || 0) / (1.0278 - 0.0278 * (entry.repetitions || 0))
     );
   });
-
-  const exerciseIds = Array.from(uniqueExercises);
 
   // Find min and max dates
   const allDates = Object.keys(groupedByDate).map((date) => parseISO(date));
@@ -46,29 +44,33 @@ export function createOneRepMaxChartData(
 
   // Fill missing dates with the last known lift values
   const chartData: ChartData[] = [];
+  const exerciseIds = Array.from(uniqueExercises);
 
-  let lastKnownValue = 0;
+  let lastKnownValues: { [exercise: string]: number } = {};
+  exerciseIds.forEach((i) => (lastKnownValues[i] = 0));
 
   dateRange.forEach((date) => {
     const formattedDate = format(date, "yyyy-MM-dd");
 
     if (groupedByDate[formattedDate]) {
       // Update last known values with the current date's values
-      lastKnownValue = groupedByDate[formattedDate];
+      lastKnownValues = { ...lastKnownValues, ...groupedByDate[formattedDate] };
     }
 
     // Add to the result, using last known values for missing lifts
     chartData.push({
       date: formattedDate,
-      value: lastKnownValue,
+      ...lastKnownValues,
     });
   });
+  const chartConfig: ChartConfig = {};
 
-  const chartConfig: ChartConfig = {
-    value: {
-      label: exerciseIdToNameMap[exerciseId],
-      color: "hsl(var(--chart-1))",
-    },
-  };
+  exerciseIds.forEach(
+    (e, i) =>
+      (chartConfig[e] = {
+        label: exerciseIdToNameMap[e],
+        color: `hsl(var(--chart-${(i % 5) + 1}))`,
+      })
+  );
   return { exerciseIds, exerciseIdToNameMap, chartConfig, chartData };
 }
