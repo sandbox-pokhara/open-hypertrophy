@@ -5,12 +5,13 @@ from django.contrib.auth.models import AbstractUser
 from django.forms import ModelForm
 from django.http import HttpRequest
 
+from core.models import Category
 from core.models import Exercise
 from core.models import Lift
 
 
-@admin.register(Exercise)
-class ExerciseAdmin(admin.ModelAdmin[Exercise]):
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin[Category]):
     list_display = [
         "id",
         "name",
@@ -19,6 +20,36 @@ class ExerciseAdmin(admin.ModelAdmin[Exercise]):
         "date_modified",
     ]
     list_filter = ["created_by", "date_created", "date_modified"]
+    exclude = ["created_by"]
+    search_fields = ["name"]
+
+    # automatically set created_by to logged in user
+    def save_model(
+        self,
+        request: HttpRequest,
+        obj: Category,
+        form: ModelForm,
+        change: bool,
+    ):
+        # using cast because user using django admin will never
+        # be anonymous
+        user = cast(AbstractUser, request.user)
+        if not change:
+            obj.created_by = user
+        return super().save_model(request, obj, form, change)
+
+
+@admin.register(Exercise)
+class ExerciseAdmin(admin.ModelAdmin[Exercise]):
+    list_display = [
+        "id",
+        "name",
+        "category",
+        "created_by",
+        "date_created",
+        "date_modified",
+    ]
+    list_filter = ["created_by", "category", "date_created", "date_modified"]
     exclude = ["created_by"]
     search_fields = ["name"]
 
@@ -45,12 +76,13 @@ class LiftAdmin(admin.ModelAdmin[Lift]):
         "id",
         "date",
         "user",
+        "exercise__category",
         "exercise",
         "repetitions",
         "weight",
         "estimated_1rm",
     ]
-    list_filter = ["user", "exercise", "date"]
+    list_filter = ["user", "exercise__category", "exercise", "date"]
     exclude = ["user"]
 
     def estimated_1rm(self, obj: Lift):

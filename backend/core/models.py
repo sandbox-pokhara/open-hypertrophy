@@ -3,8 +3,24 @@ from django.db import models
 from django.utils import timezone
 
 
+class Category(models.Model):
+    name = models.CharField(max_length=64, unique=True)
+    created_by = models.ForeignKey(get_user_model(), on_delete=models.PROTECT)
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name_plural = "Categories"
+
+
 class Exercise(models.Model):
     name = models.CharField(max_length=64, unique=True)
+    category = models.ForeignKey(
+        Category, on_delete=models.PROTECT, null=True, blank=True
+    )
     created_by = models.ForeignKey(get_user_model(), on_delete=models.PROTECT)
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now_add=True)
