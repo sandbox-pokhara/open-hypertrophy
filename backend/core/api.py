@@ -6,9 +6,11 @@ from django.contrib.auth import login as django_login
 from django.contrib.auth import logout as django_logout
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.base_user import AbstractBaseUser
+from django.contrib.auth.models import Permission
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError
+from django.db import transaction
 from django.http import HttpRequest
 from ninja import NinjaAPI
 from ninja import Router
@@ -120,15 +122,29 @@ def create_lift(request: HttpRequest, payload: CreateLiftSchema):
 
 @users.post("/", response={201: GenericSchema, 400: GenericSchema})
 def create_user(request: HttpRequest, payload: CreateUser):
+    # TODO: remove staff user access after editing from frontend is
+    # possible
     if get_user_model().objects.filter(username=payload.username).exists():
         return 400, GenericSchema(detail="Username is already used.")
-    u = get_user_model().objects.create_user(
-        first_name=payload.first_name,
-        last_name=payload.last_name,
-        username=payload.username,
-        password=payload.password,
-    )
-    u.save()
+    with transaction.atomic():
+        u = get_user_model().objects.create_user(
+            is_staff=True,
+            first_name=payload.first_name,
+            last_name=payload.last_name,
+            username=payload.username,
+            password=payload.password,
+        )
+        u.user_permissions.add(Permission.objects.get(codename="add_category"))
+        u.user_permissions.add(
+            Permission.objects.get(codename="view_category")
+        )
+        u.user_permissions.add(Permission.objects.get(codename="add_exercise"))
+        u.user_permissions.add(
+            Permission.objects.get(codename="view_exercise")
+        )
+        u.user_permissions.add(Permission.objects.get(codename="add_lift"))
+        u.user_permissions.add(Permission.objects.get(codename="view_lift"))
+        u.save()
     return 201, GenericSchema(detail="Success.")
 
 
