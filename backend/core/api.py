@@ -14,22 +14,27 @@ from ninja import NinjaAPI
 from ninja import Router
 from ninja.security import SessionAuth
 
+from core.models import Category
 from core.models import Exercise
 from core.models import Lift
+from core.schema import CategorySchema
 from core.schema import ChangePassword
 from core.schema import CreateExerciseSchema
 from core.schema import CreateLiftSchema
 from core.schema import CreateUser
+from core.schema import ExerciseSchema
 from core.schema import GenericSchema
 from core.schema import LiftSchema
 from core.schema import Login
 from core.schema import UserSchema
 
+categories = Router()
 exercises = Router()
 lifts = Router()
 users = Router()
 
 api = NinjaAPI(docs_url="/docs/")
+api.add_router("/categories/", categories, tags=["categories"])
 api.add_router("/exercises/", exercises, tags=["exercises"])
 api.add_router("/lifts/", lifts, tags=["lifts"])
 api.add_router("/users/", users, tags=["users"])
@@ -57,10 +62,19 @@ def validation_error_handler(request: HttpRequest, exc: ValidationError):
 session_auth = SessionAuth(csrf=False)
 
 
+@categories.get(
+    "/",
+    auth=session_auth,
+    response={200: list[CategorySchema], 401: GenericSchema},
+)
+def list_categories(request: HttpRequest):
+    return 200, Category.objects.all().order_by("-date_created")
+
+
 @exercises.get(
     "/",
     auth=session_auth,
-    response={200: list[CreateExerciseSchema], 401: GenericSchema},
+    response={200: list[ExerciseSchema], 401: GenericSchema},
 )
 def list_exercises(request: HttpRequest):
     return 200, Exercise.objects.all().order_by("-date_created")

@@ -5,12 +5,19 @@ from ninja import Field
 from ninja import ModelSchema
 from ninja import Schema
 
+from core.models import Category
 from core.models import Exercise
 from core.models import Lift
 
 
 class GenericSchema(Schema):
     detail: str
+
+
+class CategorySchema(ModelSchema):
+    class Meta:
+        model = Category
+        fields = "__all__"
 
 
 class ExerciseSchema(ModelSchema):

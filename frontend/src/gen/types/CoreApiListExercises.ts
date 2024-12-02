@@ -1,10 +1,10 @@
-import type { CreateExerciseSchema } from "./CreateExerciseSchema.ts";
+import type { ExerciseSchema } from "./ExerciseSchema.ts";
 import type { GenericSchema } from "./GenericSchema.ts";
 
  /**
  * @description OK
 */
-export type CoreApiListExercises200 = CreateExerciseSchema[];
+export type CoreApiListExercises200 = ExerciseSchema[];
 
  /**
  * @description Unauthorized
