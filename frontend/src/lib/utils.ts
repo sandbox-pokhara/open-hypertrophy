@@ -29,9 +29,11 @@ export function createOneRepMaxChartData(data: LiftSchema[], category: string) {
     if (!groupedByDate[date]) {
       groupedByDate[date] = {};
     }
-    groupedByDate[date][entry.exercise] = Math.round(
+    const existing1RM = groupedByDate[date][entry.exercise] || 0;
+    const current1RM = Math.round(
       (entry.weight || 0) / (1.0278 - 0.0278 * (entry.repetitions || 0))
     );
+    groupedByDate[date][entry.exercise] = Math.max(existing1RM, current1RM);
   });
 
   // Find min and max dates
